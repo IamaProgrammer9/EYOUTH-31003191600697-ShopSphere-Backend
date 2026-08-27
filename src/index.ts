@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import authRoutes from "./routes/auth.js";
 import productsRoutes from "./routes/products.js";
 import cartRoutes from "./routes/cart.js";
@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import * as helmet from 'helmet';
 import cors from "cors";
 import { rateLimit } from "express-rate-limit";
+import axios from "axios";
 
 const app = express();
 
@@ -63,6 +64,18 @@ app.use(cors(corsOptions));
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productsRoutes);
 app.use('/api/cart', cartRoutes);
-app.use('/health', healthRoutes)
+app.use('/health', healthRoutes);
+
+app.post('/api/analytics', async (req: Request, res: Response) => {
+  res.status(200).json({ message: 'Request recieved, background task offloaded'});
+
+  const vercelAppUUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://nile-bridge-backend.vercel.app';
+
+  axios.post(`${vercelAppUUrl}/api/analytics`).then((res) => {
+    console.log('Serverless response', res.data);
+  }).catch((err) => {
+    console.log('Serverless error', err.message);
+  })
+})
 
 export default app;
