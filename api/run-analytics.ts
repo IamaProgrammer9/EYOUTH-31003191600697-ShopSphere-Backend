@@ -1,12 +1,22 @@
 import { PrismaClient } from "@prisma/client";
-import { Request, Response } from "express";
+import { VercelRequest, VercelResponse } from "@vercel/node";
 
-const prisma = new PrismaClient();
+const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
+let prisma: PrismaClient;
 
-export default async function handler(req: Request, res: Response) {
+function getPrisma() {
+    if (!prisma) {
+        prisma = globalForPrisma.prisma ?? new PrismaClient();
+        globalForPrisma.prisma = prisma;
+    }
+    return prisma;
+}
+
+export default async function handler(_req: VercelRequest, res: VercelResponse) {
     try {
-        const productCount = await prisma.product.count();
-        const userCount = await prisma.user.count();
+        const db = getPrisma();
+        const productCount = await db.product.count();
+        const userCount = await db.user.count();
 
         console.log(`[Vercel Serverless Task Executed] Total Amount of Products: ${productCount}`);
         console.log(`[Vercel Serverless Task Executed] Total Amount of Users: ${userCount}`);

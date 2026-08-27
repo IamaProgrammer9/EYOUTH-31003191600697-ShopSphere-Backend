@@ -4,18 +4,23 @@
     {
       "src": "src/index.ts",
       "use": "@vercel/node"
+    },
+    {
+      "src": "api/run-analytics.ts",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
+    {
+      "src": "/api/run-analytics",
+      "dest": "/api/run-analytics.ts"
+    },
     {
       "src": "/(.*)",
       "dest": "/src/index.ts"
     }
   ],
   "crons": [
-    {
-      "path": "/api/run-analytics",
-      "schedule": "0 * * * *"
-    }
+    { "path": "/api/run-analytics", "schedule": "0 12 * * *" }
   ]
 }
