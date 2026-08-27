@@ -8,6 +8,7 @@ import * as helmet from 'helmet';
 import cors from "cors";
 import { rateLimit } from "express-rate-limit";
 import axios from "axios";
+import morgan from 'morgan';
 
 const app = express();
 
@@ -18,6 +19,8 @@ const limiter = rateLimit({
     legacyHeaders: true,
     ipv6Subnet: 60,
 })
+
+app.use(morgan('dev')); 
 
 // Security middleware
 app.use(limiter);

@@ -36,7 +36,7 @@ export async function refreshTokenController(req: Request, res: Response): Promi
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             maxAge: 15 * 60 * 1000,  // 15 minutes
-            sameSite: "strict"
+            sameSite: "none"
         });
 
         res.send({'detail': 'access token refreshed successfully'});
