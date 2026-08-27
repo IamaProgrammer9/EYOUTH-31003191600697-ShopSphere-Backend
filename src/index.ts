@@ -28,7 +28,7 @@ app.use(helmet.default({
 app.use(cookieParser());
 app.use(express.json());
 // File middleware
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static('public/uploads'));
 
 const allowedOrigins = [
   'https://nile-bridge.vercel.app',

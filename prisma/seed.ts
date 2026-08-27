@@ -13,7 +13,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const seedImagesDir = path.resolve(__dirname, "seed-images");
-const uploadsDir = path.resolve(__dirname, "../uploads");
+const uploadsDir = path.resolve(__dirname, "../public/uploads");
 
 const categories = [
     { name: "Technology" },
