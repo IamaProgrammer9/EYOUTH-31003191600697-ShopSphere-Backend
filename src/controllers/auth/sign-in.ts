@@ -79,7 +79,9 @@ export async function signInController(req: Request, res: Response): Promise<voi
     });
 
     // Send a success message to the client indicating authentication was successful
-    res.send('authenticated successfully');
+    res.send({
+        accessToken: accessToken,
+    });
 }
 
 export default signInController;

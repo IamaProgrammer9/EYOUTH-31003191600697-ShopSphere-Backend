@@ -19,8 +19,6 @@ export async function refreshTokenController(req: Request, res: Response): Promi
         const user = await getUserFromRequest(req);
         const refreshToken = req.cookies.refreshToken;
 
-        console.log(refreshToken)
-
         if (!user || !refreshToken) {
             res.status(401).send('Refresh token not found');
             return;
