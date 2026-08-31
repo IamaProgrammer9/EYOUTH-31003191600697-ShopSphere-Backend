@@ -42,7 +42,7 @@ export async function refreshTokenController(req: Request, res: Response): Promi
             maxAge: 15 * 60 * 1000,
         });
 
-        res.send({'detail': 'access token refreshed successfully'});
+        res.json({ accessToken: newAccessToken });
     } catch {
         res.status(401).send('Something wrong happened');
     }

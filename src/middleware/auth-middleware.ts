@@ -16,7 +16,9 @@ export interface DecodedToken {
  * @returns {Response} The response object containing the status code and message if authentication fails or is missing.
  */
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    const token = req.cookies?.accessToken;
+    const authHeader = req.headers.authorization;
+    const bearerToken = authHeader?.startsWith('Bearer ') ? authHeader.split(' ')[1] : undefined;
+    const token = req.cookies?.accessToken || req.body?.accessToken || bearerToken;
 
     if (!token || !req.path.startsWith('/')) {
         res.status(401).send('Unauthorized');
