@@ -1,6 +1,7 @@
 import { prisma} from "../../lib/prisma.js";
 import { Request, Response } from "express";
 import { authConfig } from "../../auth/auth.config.js";
+import { localCookieSettings, deploymentCookieSettings } from "../../settings.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -61,20 +62,20 @@ export async function signInController(req: Request, res: Response): Promise<voi
         data: {refreshToken}
     });
 
+    const cookieSettings = process.env.PRODUCTION === "true"
+        ? deploymentCookieSettings
+        : localCookieSettings;
+
     // Set the access token cookie with appropriate security headers and expiration time
     res.cookie("accessToken", accessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        ...cookieSettings,
         maxAge: 15 * 60 * 1000,
-        sameSite: "none"
     });
 
     // Set the refresh token cookie with appropriate security headers and expiration time
     res.cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        ...cookieSettings,
         maxAge: 24 * 60 * 60 * 1000,
-        sameSite: "none"
     });
 
     // Send a success message to the client indicating authentication was successful
